@@ -57,6 +57,11 @@ func PublishMarkdownFile2Medium(opts *Options) {
 	}
 	publishStatus := medium.PublishStatus(opts.PublishStatus)
 
+	// TODO support for Images !!!!!!!!!!
+	// if err := htmlFormatter.ReplaceImages(mediumClient); err != nil {
+	// 	logger.Error(fmt.Sprintf("Error replacing images: %s", err))
+	// }
+
 	post, err := mediumClient.CreatePost(medium.CreatePostOptions{
 		UserID:        user.ID,
 		Title:         metadata.Title,
@@ -144,16 +149,18 @@ func ComposeFinalMarkdown(content []byte, opts *Options, metadata *FrontMatterMe
 
 	buf := new(bytes.Buffer)
 
-	// header
+	// header: Medium Story (aka post) title
+	// TODO should be controlled by flag
 	buf.WriteString("# ")
 	buf.WriteString(metadata.Title)
 	buf.WriteRune('\n')
 	buf.WriteRune('\n')
 
-	// body
+	// body: source post content
 	buf.Write(content)
 
-	// footer
+	// footer: Originally published note
+	// TODO should be controlled by opts.OriginalNote, if missing, skip
 	u, err := url.Parse(opts.CanonicalURL)
 	if err != nil {
 		log.Fatalf("Failed to parse Canonical URL: %s", err)
