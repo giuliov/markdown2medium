@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"mdext"
 	"mime"
 	"net/url"
 	"os"
@@ -15,11 +14,14 @@ import (
 
 	"github.com/BurntSushi/toml"
 	"github.com/Medium/medium-sdk-go"
+	"github.com/giuliov/markdown2medium/mdext"
 	"github.com/jessevdk/go-flags"
 	"github.com/yuin/goldmark"
 	"gopkg.in/yaml.v2"
 	// highlighting "github.com/yuin/goldmark-highlighting"
 )
+
+var buildVersion string
 
 // Options receive command line parameters
 type Options struct {
@@ -33,6 +35,8 @@ type Options struct {
 }
 
 func main() {
+
+	fmt.Printf("Markdown to Medium v%s\n", buildVersion)
 
 	var opts Options
 	if _, err := flags.Parse(&opts); err != nil {
